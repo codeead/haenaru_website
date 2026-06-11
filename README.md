@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 해나루 종합설비 홈페이지
 
-## Getting Started
+설비 시공 전문 업체 홈페이지. 기술 스택 및 프로젝트 규칙은 [CLAUDE.md](./CLAUDE.md), 기능 명세는
+[기능정의서.md](./기능정의서.md)를 참조한다.
 
-First, run the development server:
+## 시작하기
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000) 에서 확인.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 주요 명령어
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 명령어 | 설명 |
+|---|---|
+| `npm run dev` | 로컬 개발 서버 |
+| `npm run build` | 프로덕션 빌드 |
+| `npm run preview` | OpenNext + Wrangler로 Cloudflare 환경 프리뷰 |
+| `npm run deploy` | Cloudflare에 배포 |
+| `npm run lint` | ESLint |
+| `npm run cf-typegen` | `wrangler.jsonc` 변경 후 Cloudflare 바인딩 타입 재생성 |
+| `npm run db:generate` | Drizzle 마이그레이션 생성 |
+| `npm run db:migrate:local` | 로컬 D1에 마이그레이션 적용 |
+| `npm run db:migrate:remote` | 원격 D1에 마이그레이션 적용 |
 
-## Learn More
+## 배포 전 준비 (Cloudflare)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. `npx wrangler login`
+2. `npx wrangler d1 create mechanical-website-db` → `wrangler.jsonc`의 `database_id`에 반영
+3. `npx wrangler r2 bucket create mechanical-website-photos`
+4. `npx wrangler r2 bucket create mechanical-website-opennext-cache`
+5. `.dev.vars.example`을 `.dev.vars`로 복사 후 값 채우기 (커밋 금지)
+6. 운영 환경 변수는 `wrangler secret put <NAME>`으로 등록
