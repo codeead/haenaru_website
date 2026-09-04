@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HeroCarousel from "@/components/sections/HeroCarousel.astro";
+import RepairHistory from "@/components/sections/RepairHistory.astro";
+import { siteConfig } from "@/lib/site";
+---
+
+<BaseLayout title="홈" description={siteConfig.tagline}>
+  <HeroCarousel />
+  <RepairHistory />
+</BaseLayout>

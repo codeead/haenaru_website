@@ -1,0 +1,90 @@
+---
+import { Image } from "astro:assets";
+import sunset1 from "@/assets/hero/sunset-1.jpg";
+import sunset2 from "@/assets/hero/sunset-2.jpg";
+import KakaoChannelButton from "@/components/KakaoChannelButton.astro";
+import { siteConfig } from "@/lib/site";
+
+const slides = [sunset1, sunset2];
+---
+
+<section class="relative h-[78svh] min-h-[440px] w-full overflow-hidden">
+  <div id="hero-slides" class="absolute inset-0">
+    {
+      slides.map((src, i) => (
+        <Image
+          src={src}
+          alt=""
+          class:list={[
+            "hero-slide absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out",
+            i === 0 ? "opacity-100" : "opacity-0",
+          ]}
+          widths={[640, 1024, 1600]}
+          sizes="100vw"
+          loading={i === 0 ? "eager" : "lazy"}
+          fetchpriority={i === 0 ? "high" : "auto"}
+        />
+      ))
+    }
+  </div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+
+  <div class="relative flex h-full flex-col items-center justify-center px-4 text-center">
+    <p class="text-sm font-medium tracking-[0.02em] text-white/80">
+      {siteConfig.address.split("(")[0].trim()} · {siteConfig.establishedYear}년부터
+    </p>
+    <h1 class="mt-3 max-w-2xl text-[clamp(1.75rem,5vw,3rem)] font-bold leading-[1.15] tracking-[-0.02em] text-white">
+      배관·보일러·난방,<br />해나루가 꼼꼼하게 고칩니다
+    </h1>
+    <p class="mt-4 max-w-md text-balance text-base leading-relaxed text-white/85">
+      {siteConfig.tagline}
+    </p>
+    <div class="mt-8">
+      <KakaoChannelButton label="견적 문의하기" />
+    </div>
+  </div>
+
+  <div class="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-1.5">
+    {
+      slides.map((_, i) => (
+        <span
+          class:list={["hero-dot h-1.5 rounded-full bg-white/50 transition-all duration-300", i === 0 ? "w-6 bg-white" : "w-1.5"]}
+          data-index={i}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const slides = document.querySelectorAll<HTMLElement>(".hero-slide");
+  const dots = document.querySelectorAll<HTMLElement>(".hero-dot");
+  let current = 0;
+
+  if (slides.length > 1) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const intervalMs = prefersReducedMotion ? 6000 : 5000;
+
+    setInterval(() => {
+      slides[current].classList.replace("opacity-100", "opacity-0");
+      dots[current]?.classList.replace("w-6", "w-1.5");
+      dots[current]?.classList.remove("bg-white");
+      dots[current]?.classList.add("bg-white/50");
+
+      current = (current + 1) % slides.length;
+
+      slides[current].classList.replace("opacity-0", "opacity-100");
+      dots[current]?.classList.replace("w-1.5", "w-6");
+      dots[current]?.classList.remove("bg-white/50");
+      dots[current]?.classList.add("bg-white");
+    }, intervalMs);
+  }
+</script>

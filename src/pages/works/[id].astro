@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getServiceByKey } from "@/content/services";
+
+export async function getStaticPaths() {
+  const works = await getCollection("works", ({ data }) => !data.draft);
+  return works.map((work) => ({
+    params: { id: work.id },
+    props: { work },
+  }));
+}
+
+const { work } = Astro.props;
+const { title, category, workedAt, locationRegion, coverImage, photos } = work.data;
+const { Content } = await render(work);
+const categoryLabel = getServiceByKey(category)?.title ?? category;
+const dateLabel = workedAt.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
+const galleryPhotos = photos.length > 0 ? photos : [coverImage];
+---
+
+<BaseLayout title={title} description={`${locationRegion} · ${categoryLabel} 시공 사례`}>
+  <article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+    <a href="/works" class="text-sm font-medium text-foreground-muted hover:text-foreground">← 수리 이력 전체보기</a>
+
+    <p class="mt-6 text-sm font-medium text-primary">{categoryLabel}</p>
+    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold leading-tight tracking-[-0.02em] text-foreground">
+      {title}
+    </h1>
+    <p class="mt-2 text-sm text-foreground-muted">{locationRegion} · {dateLabel}</p>
+
+    <div class="mt-8 overflow-hidden rounded-lg border border-border">
+      <Image src={coverImage} alt={title} width={960} height={640} class="w-full object-cover" />
+    </div>
+
+    <div class="prose prose-neutral mt-8 max-w-none text-foreground-muted [&_p]:leading-[1.8]">
+      <Content />
+    </div>
+
+    {
+      galleryPhotos.length > 1 && (
+        <div class="mt-10 grid gap-3 sm:grid-cols-2">
+          {galleryPhotos.map((photo) => (
+            <Image src={photo} alt="" width={480} height={360} class="w-full rounded-md object-cover" />
+          ))}
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>

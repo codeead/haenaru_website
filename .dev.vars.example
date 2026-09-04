@@ -1,5 +1,0 @@
-# Copy to `.dev.vars` (gitignored) and fill in real local values.
-NEXT_PUBLIC_KAKAO_JS_KEY=
-NEXT_PUBLIC_KAKAO_CHANNEL_PUBLIC_ID=
-KAKAO_REST_KEY=
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
