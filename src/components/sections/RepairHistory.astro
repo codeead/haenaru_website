@@ -10,7 +10,7 @@ const recentWorks = allWorks
 const [featuredWork, ...restWorks] = recentWorks;
 ---
 
-<section id="works-preview" class="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
+<section id="works-preview" class="section mx-auto max-w-5xl px-4 sm:px-6">
   <div class="flex items-end justify-between gap-6 border-b border-border pb-5">
     <div>
       <p class="text-sm font-semibold tracking-[0.02em] text-sea-deep">시공 기록</p>
@@ -29,7 +29,7 @@ const [featuredWork, ...restWorks] = recentWorks;
     <ToolMotion tool="grinder" side="right" />
     {
       !featuredWork ? (
-        <div class="rounded-xl border border-border bg-surface px-6 py-16 text-center shadow-sm">
+        <div class="rounded-md border border-border bg-surface px-6 py-16 text-center shadow-sm">
           <p class="text-base text-ink-muted">첫 번째 시공 사진을 정리하고 있습니다. 곧 올라옵니다.</p>
         </div>
       ) : restWorks.length === 2 ? (

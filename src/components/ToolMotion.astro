@@ -37,10 +37,16 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
 
 <div class:list={["tool-motion", `side-${side}`, `tool-${tool}`, className]} aria-hidden="true">
   <svg viewBox="0 0 180 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- C안 감성: 면으로 그리고 부드러운 그림자로 층을 만든다 -->
+      <filter id="tool-shadow" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="var(--color-deep)" flood-opacity="0.16" />
+      </filter>
+    </defs>
     <!-- 작업 기준선 -->
     <line x1={TARGET_X} y1="34" x2={TARGET_X} y2="226" stroke="var(--color-sea-soft)" stroke-width="6" stroke-linecap="round" />
 
-    <g class="rig">
+    <g class="rig" filter="url(#tool-shadow)">
       {
         tool === "wrench" && (
           <g stroke-linecap="round" stroke-linejoin="round">
@@ -67,15 +73,15 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
                 x2={TARGET_X - 108}
                 y2={STOP_MID + 40}
                 stroke="var(--color-sea)"
-                stroke-width="17"
+                stroke-width="19"
               />
               <line
-                x1={TARGET_X - 74}
-                y1={STOP_MID + 20}
-                x2={TARGET_X - 96}
-                y2={STOP_MID + 33}
+                x1={TARGET_X - 72}
+                y1={STOP_MID + 19}
+                x2={TARGET_X - 98}
+                y2={STOP_MID + 34}
                 stroke="var(--color-sunset)"
-                stroke-width="8"
+                stroke-width="9"
               />
             </g>
           </g>
@@ -85,11 +91,11 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
         tool === "grinder" && (
           <g>
             <g class="blade">
-              <circle cx={TARGET_X - 46} cy={STOP_MID} r={BLADE_R} stroke="var(--color-sea)" stroke-width="8" fill="var(--color-surface)" />
+              <circle cx={TARGET_X - 46} cy={STOP_MID} r={BLADE_R} fill="var(--color-sea-soft)" stroke="var(--color-sea)" stroke-width="6" />
               {teeth.map((t) => (
                 <line x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="var(--color-sea-deep)" stroke-width="4" stroke-linecap="round" />
               ))}
-              <circle cx={TARGET_X - 46} cy={STOP_MID} r="11" stroke="var(--color-sea-deep)" stroke-width="7" fill="none" />
+              <circle cx={TARGET_X - 46} cy={STOP_MID} r="12" fill="var(--color-surface)" stroke="var(--color-sea-deep)" stroke-width="6" />
             </g>
             <g class="zap">
               <circle class="spark s1" cx={TARGET_X - 14} cy={STOP_MID + 22} r="5" fill="var(--color-sunset)" />
@@ -102,7 +108,7 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
       {
         tool === "welder" && (
           <g stroke-linecap="round" stroke-linejoin="round">
-            <path d={`M${TARGET_X - 112} ${STOP_MID + 54} L${TARGET_X - 56} ${STOP_MID + 14}`} stroke="var(--color-sea-deep)" stroke-width="20" />
+            <path d={`M${TARGET_X - 112} ${STOP_MID + 54} L${TARGET_X - 56} ${STOP_MID + 14}`} stroke="var(--color-deep)" stroke-width="22" />
             <path d={`M${TARGET_X - 100} ${STOP_MID + 40} L${TARGET_X - 80} ${STOP_MID + 26}`} stroke="var(--color-sea-soft)" stroke-width="7" />
             <path d={`M${TARGET_X - 56} ${STOP_MID + 14} L${TARGET_X - 26} ${STOP_MID + 2}`} stroke="var(--color-sea)" stroke-width="13" />
             <g class="zap">

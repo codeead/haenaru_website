@@ -3,9 +3,9 @@
  * 카카오톡 채널 채팅 버튼.
  * 채널 링크는 CMS "사이트 설정"의 kakaoChannelUrl 한 칸으로 관리한다.
  *
- * 링크가 아직 없을 때:
- *  - 기본값은 아예 그리지 않는다 (전화 버튼과 같은 동작을 하는 버튼이 둘 서는 걸 막는다).
- *  - always를 주면 자리를 지키되 눌리지 않는 "준비 중" 상태로 보여준다. 링크를 넣는 순간 바로 살아난다.
+ * 링크가 있을 때만 카카오 고유색(#FEE500)을 쓴다. 그 색은 우리 팔레트 밖이라
+ * 링크가 없는 "준비 중" 상태까지 노란 버튼으로 두면 화면에서 혼자 튄다.
+ * 준비 중일 때는 시스템 색(테두리 + 흐린 글자)으로 자리만 지킨다.
  */
 import { siteConfig } from "@/lib/site";
 
@@ -17,8 +17,6 @@ interface Props {
 
 const { label = "카카오톡 문의", class: className = "", always = false } = Astro.props;
 const channelUrl = siteConfig.kakaoChannelUrl.trim();
-const base =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold shadow-sm transition-transform";
 ---
 
 {
@@ -27,16 +25,15 @@ const base =
       href={channelUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class:list={[base, "bg-[#FEE500] text-[#3C1E1E] active:scale-[0.97]", className]}
+      class:list={["kakao-btn kakao-live", className]}
     >
       {label}
     </a>
   ) : (
     always && (
       <span
-        class:list={[base, "cursor-not-allowed bg-[#FEE500]/45 text-[#3C1E1E]/55", className]}
+        class:list={["kakao-btn kakao-pending", className]}
         aria-disabled="true"
-        data-state="준비중"
         title="카카오톡 채널 준비 중입니다. 지금은 전화로 연락해 주세요."
       >
         {label}
@@ -44,3 +41,32 @@ const base =
     )
   )
 }
+
+<style>
+  .kakao-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-pill);
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 160ms ease;
+  }
+  .kakao-live {
+    background: #fee500;
+    color: #3c1e1e;
+    box-shadow: var(--shadow-sm);
+  }
+  .kakao-live:active {
+    transform: scale(0.97);
+  }
+  .kakao-pending {
+    background: transparent;
+    color: var(--color-ink-muted);
+    border: 1.5px solid var(--color-border);
+    cursor: not-allowed;
+  }
+</style>

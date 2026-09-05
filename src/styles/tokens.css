@@ -1,62 +1,80 @@
 /*
- * 디자인 토큰 — "노을 머금은 바다" 파스텔 팔레트.
+ * 디자인 토큰 — UI 키트 C안 "물과 빛".
  * 근거 문서: .design/hanaru-brand/DESIGN_BRIEF.md
  *
  * 원칙
- *  - 색은 특정 사진이 아니라 (파스텔로 리컬러링한) 로고에서만 유래한다. 사진이 바뀌어도 색은 그대로.
- *  - 쨍한 색(--color-sun)은 로고와 아주 작은 배지에만. 넓은 면적 금지.
- *  - 본문 글자는 --color-ink / --color-ink-muted 만. 노을 계열은 글자색으로 쓰지 않는다.
- *  - 모든 텍스트 조합은 WCAG AA(4.5:1) 이상으로 검증됨.
+ *  - 같은 계열 안에서 명도 폭을 넓게 잡는다. 파스텔만 나열하면 화면이 납작해진다.
+ *    옅은 면(sea-pale) → 중간 면(sea-soft) → 짙은 앵커(deep)까지 층을 쓴다.
+ *  - 색은 (파스텔로 리컬러링한) 로고에서만 유래한다. 사진이 바뀌어도 색은 그대로.
+ *  - 노을색(sun)은 대비 3.3:1이라 본문 글자에 쓰지 않는다. 라벨 숫자·포인트 장식 전용.
+ *  - 본문 글자는 --color-ink / --color-ink-muted 만. 모든 조합 WCAG AA 검증 완료.
  */
 :root {
-  /* 바다 (주 색) */
-  --color-sea: #3d7a94;
-  --color-sea-deep: #2b5a70;
-  --color-sea-soft: #d5e4ea;
-  --color-sea-pale: #eef5f7;
+  /* 물 — 옅은 면부터 짙은 앵커까지 층으로 */
+  --color-sea-pale: #f2f5f6;
+  --color-sea-soft: #dce9ee;
+  --color-sea: #2f6d88;
+  --color-sea-deep: #14495f;
 
-  /* 노을 (따뜻한 보조 색 — 장식 전용, 글자색 금지) */
-  --color-sunset: #e0916b;
-  --color-sunset-soft: #f7e3d6;
-  --color-sun: #d9674a;
-
-  /* 작업자 일러스트 전용 (안전모/조끼) */
-  --color-gear-helmet: #ffffff;
-  --color-gear-helmet-line: #2c3338;
-  --color-gear-helmet-ridge: #c3ced6;
+  /* 빛 — 노을 (장식 전용, 본문 글자 금지) */
+  --color-sunset-soft: #f6e2d8;
+  --color-sunset: #e09b7c;
+  --color-sun: #d4744f;
 
   /* 깊은 앵커 — 파스텔을 눌러주는 무게중심 (푸터/강조 블록) */
-  --color-deep: #17222f;
-  --color-deep-soft: #24344a;
-  --color-on-deep: #e8edf1;
-  --color-on-deep-muted: #9fb0c0;
+  --color-deep: #12222c;
+  --color-deep-soft: #1e3745;
+  --color-on-deep: #dfe8ec;
+  --color-on-deep-muted: #93a8b4;
 
   /* 바탕과 글자 */
-  --color-background: #f9f8f5;
+  --color-background: #f2f5f6;
   --color-surface: #ffffff;
-  --color-ink: #2c3338;
-  --color-ink-muted: #5d6b73;
-  --color-border: #e3e4e0;
+  --color-ink: #1d2a33;
+  --color-ink-muted: #5c7080;
+  --color-border: #dde6ea;
+
+  /* 작업자 일러스트 (면 중심 + 두꺼운 선) */
+  --color-gear-helmet: #ffffff;
+  --color-gear-helmet-line: #1d2a33;
+  --color-gear-helmet-ridge: #bccdd6;
 
   /* 역할 별칭 */
   --color-primary: var(--color-sea-deep);
   --color-primary-foreground: #ffffff;
   --color-link: var(--color-sea-deep);
 
-  /* 둥근 모서리 (따뜻한 톤 — 기존보다 크게) */
+  /* 모서리 — 카드는 넉넉하게, 버튼은 알약 */
   --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgb(23 34 47 / 0.05), 0 1px 1px rgb(23 34 47 / 0.04);
-  --shadow-md: 0 2px 4px rgb(23 34 47 / 0.04), 0 12px 28px rgb(23 34 47 / 0.07);
+  /*
+   * 여백 스케일 — 4px 기반. 한 값을 반복하지 않고 '좁게/보통/넉넉하게'를 의도적으로 대비시킨다.
+   *   tight  : 라벨↔제목처럼 한 덩어리 안
+   *   snug   : 제목↔설명
+   *   normal : 덩어리↔덩어리
+   *   loose  : 본문↔다음 블록
+   *   section: 섹션 사이 리듬
+   */
+  --space-tight: 0.5rem;
+  --space-snug: 1rem;
+  --space-normal: 1.75rem;
+  --space-loose: 3rem;
+  --space-section: 5rem;
+  --space-section-lg: 7rem;
+
+  /* 그림자 — 층을 만드는 도구. 옅고 넓게 두 겹. */
+  --shadow-sm: 0 1px 2px rgb(18 34 44 / 0.05), 0 1px 1px rgb(18 34 44 / 0.04);
+  --shadow-md: 0 2px 6px rgb(18 34 44 / 0.05), 0 14px 32px rgb(18 34 44 / 0.09);
+  --shadow-lg: 0 4px 10px rgb(18 34 44 / 0.06), 0 24px 56px rgb(18 34 44 / 0.13);
 }
 
 /*
  * 다크 모드는 의도적으로 쓰지 않는다.
  * 파스텔 팔레트는 어두운 바탕에서 탁해지고, 주 방문자(어르신 포함)에게는
- * 밝고 대비 확실한 화면이 더 편하다. 대신 어떤 환경에서도 같은 화면이 나오도록 색을 명시한다.
+ * 밝고 대비 확실한 화면이 더 편하다.
  */
 
 @theme inline {
@@ -81,14 +99,22 @@
   --color-ink: var(--color-ink);
   --color-ink-muted: var(--color-ink-muted);
 
+  --spacing-tight: var(--space-tight);
+  --spacing-snug: var(--space-snug);
+  --spacing-normal: var(--space-normal);
+  --spacing-loose: var(--space-loose);
+  --spacing-section: var(--space-section);
+  --spacing-section-lg: var(--space-section-lg);
+
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
 
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
 
   --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     system-ui, sans-serif;
-  --font-display: Jua, Pretendard, system-ui, sans-serif;
+  --font-display: "Gowun Dodum", Pretendard, system-ui, sans-serif;
 }

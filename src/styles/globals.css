@@ -25,6 +25,16 @@
     text-wrap: balance;
   }
 
+  /* 섹션 리듬 — 한 값을 반복하지 않도록 토큰 스케일에서만 가져온다 */
+  .section {
+    padding-block: var(--space-section);
+  }
+  @media (min-width: 640px) {
+    .section {
+      padding-block: var(--space-section-lg);
+    }
+  }
+
   /* 고정 헤더에 가리지 않도록 앵커 도착 지점에 여유를 준다 */
   :target,
   [id] {
