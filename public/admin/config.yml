@@ -3,7 +3,7 @@ backend:
   branch: main
 
 # 미리보기 링크 생성에 사용 — astro.config.mjs 의 site 값과 항상 동일하게 유지
-site_url: https://example.com
+site_url: https://haenarueng.com
 publish_mode: simple
 
 collections:

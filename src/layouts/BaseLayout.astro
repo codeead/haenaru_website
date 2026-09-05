@@ -12,8 +12,8 @@ interface Props {
 
 const { title, description = siteConfig.tagline } = Astro.props;
 const pageTitle = `${title} | ${siteConfig.companyName}`;
-const ogImage = new URL("/og-image.png", Astro.site ?? "https://example.com").href;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com").href;
+const ogImage = new URL("/og-image.png", Astro.site ?? "https://haenarueng.com").href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://haenarueng.com").href;
 
 /*
  * 지역업체 구조화 데이터. 검색 결과에 상호·전화·주소·영업시간이 직접 노출되게 한다.
