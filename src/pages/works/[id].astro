@@ -2,14 +2,14 @@
 import { getCollection, render } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import KakaoChannelButton from "@/components/KakaoChannelButton.astro";
 import { getServiceByKey } from "@/content/services";
+import { siteConfig } from "@/lib/site";
 
 export async function getStaticPaths() {
   const works = await getCollection("works", ({ data }) => !data.draft);
-  return works.map((work) => ({
-    params: { id: work.id },
-    props: { work },
-  }));
+  return works.map((work) => ({ params: { id: work.id }, props: { work } }));
 }
 
 const { work } = Astro.props;
@@ -17,35 +17,50 @@ const { title, category, workedAt, locationRegion, coverImage, photos } = work.d
 const { Content } = await render(work);
 const categoryLabel = getServiceByKey(category)?.title ?? category;
 const dateLabel = workedAt.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
-const galleryPhotos = photos.length > 0 ? photos : [coverImage];
+const galleryPhotos = photos.length > 0 ? photos : [{ src: coverImage, alt: title }];
 ---
 
 <BaseLayout title={title} description={`${locationRegion} · ${categoryLabel} 시공 사례`}>
-  <article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-    <a href="/works" class="text-sm font-medium text-foreground-muted hover:text-foreground">← 수리 이력 전체보기</a>
+  <PageHeader eyebrow={`${categoryLabel} · ${locationRegion}`} title={title} lead={dateLabel} />
 
-    <p class="mt-6 text-sm font-medium text-primary">{categoryLabel}</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold leading-tight tracking-[-0.02em] text-foreground">
-      {title}
-    </h1>
-    <p class="mt-2 text-sm text-foreground-muted">{locationRegion} · {dateLabel}</p>
+  <article class="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
+    <a href="/works" class="text-sm font-semibold tracking-[0.02em] text-sea-deep hover:text-ink">← 수리 이력 전체보기</a>
 
-    <div class="mt-8 overflow-hidden rounded-lg border border-border">
+    <div class="mt-6 overflow-hidden rounded-xl border border-border">
       <Image src={coverImage} alt={title} width={960} height={640} class="w-full object-cover" />
     </div>
 
-    <div class="prose prose-neutral mt-8 max-w-none text-foreground-muted [&_p]:leading-[1.8]">
+    <div class="mt-8 text-base leading-[1.9] text-ink-muted [&_p]:mb-4">
       <Content />
     </div>
 
     {
       galleryPhotos.length > 1 && (
-        <div class="mt-10 grid gap-3 sm:grid-cols-2">
+        <div class="mt-10 grid gap-4 sm:grid-cols-2">
           {galleryPhotos.map((photo) => (
-            <Image src={photo} alt="" width={480} height={360} class="w-full rounded-md object-cover" />
+            <Image
+              src={photo.src}
+              alt={photo.alt || title}
+              width={480}
+              height={360}
+              class="w-full rounded-xl border border-border object-cover"
+            />
           ))}
         </div>
       )
     }
+
+    <div class="mt-12 rounded-xl bg-sea-pale p-6 text-center sm:p-8">
+      <h2 class="text-lg font-bold text-ink sm:text-xl">비슷한 일이 있으시면 전화 주세요</h2>
+      <div class="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <a
+          href={`tel:${siteConfig.mobile}`}
+          class="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground shadow-sm transition-transform active:scale-[0.97] sm:w-auto"
+        >
+          전화 걸기
+        </a>
+        <KakaoChannelButton label="카카오톡 문의" class="w-full px-6 py-3.5 text-base sm:w-auto" always />
+      </div>
+    </div>
   </article>
 </BaseLayout>

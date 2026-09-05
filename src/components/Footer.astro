@@ -1,30 +1,40 @@
 ---
+import { Image } from "astro:assets";
+import symbol from "@/assets/brand/symbol.png";
 import { siteConfig } from "@/lib/site";
 
 const currentYear = new Date().getFullYear();
+
+const navItems = [
+  { href: "/about", label: "회사소개" },
+  { href: "/services", label: "서비스" },
+  { href: "/works", label: "수리 이력" },
+  { href: "/location", label: "오시는 길" },
+  { href: "/contact", label: "문의" },
+];
 ---
 
-<footer class="border-t border-border bg-surface">
-  <div class="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-    <div class="grid gap-8 sm:grid-cols-2">
+<!--
+  푸터는 페이지 전체를 눌러주는 무게중심이다.
+  파스텔만 이어지면 화면이 떠 보여서, 여기만 깊은 남색으로 받친다.
+-->
+<footer class="bg-deep text-on-deep">
+  <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16">
+    <div class="grid gap-10 sm:grid-cols-[1.3fr_1fr_1.2fr]">
       <div>
-        <p class="text-base font-semibold text-foreground">{siteConfig.companyName}</p>
-        <p class="mt-1 text-sm text-foreground-muted">대표 {siteConfig.ceoName}</p>
-        <p class="mt-3 text-sm leading-relaxed text-foreground-muted">{siteConfig.address}</p>
-      </div>
-      <div class="text-sm leading-relaxed text-foreground-muted">
-        <p>
-          <a href={`tel:${siteConfig.mobile}`} class="hover:text-foreground">{siteConfig.mobile}</a>
-          <span class="mx-1.5">·</span>
-          <a href={`tel:${siteConfig.phone}`} class="hover:text-foreground">{siteConfig.phone}</a>
+        <div class="flex items-center gap-2.5">
+          <Image src={symbol} alt="" width={36} height={36} class="h-9 w-9" />
+          <span class="text-base font-bold text-on-deep">{siteConfig.companyName}</span>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-on-deep-muted">
+          대표 {siteConfig.ceoName}<br />
+          {siteConfig.address}
         </p>
-        <p class="mt-1">FAX {siteConfig.fax}</p>
-        <p class="mt-1">{siteConfig.businessHours}</p>
         {
           siteConfig.registrations.length > 0 && (
-            <p class="mt-3 flex flex-wrap gap-1.5">
+            <p class="mt-4 flex flex-wrap gap-1.5">
               {siteConfig.registrations.map((r) => (
-                <span class="rounded-full border border-border px-2.5 py-0.5 text-xs text-foreground-muted">
+                <span class="rounded-md border border-white/15 px-2.5 py-1 text-xs text-on-deep-muted">
                   {r}
                 </span>
               ))}
@@ -32,10 +42,35 @@ const currentYear = new Date().getFullYear();
           )
         }
       </div>
+
+      <nav aria-label="바로가기" class="flex flex-col gap-2.5 text-sm">
+        {
+          navItems.map((item) => (
+            <a href={item.href} class="text-on-deep-muted transition-colors hover:text-on-deep">
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="text-sm">
+        <p class="text-on-deep-muted">전화 주세요</p>
+        <a
+          href={`tel:${siteConfig.mobile}`}
+          class="mt-1.5 inline-block text-xl font-bold tracking-[-0.01em] text-on-deep hover:underline"
+        >
+          {siteConfig.mobile}
+        </a>
+        <p class="mt-3 leading-relaxed text-on-deep-muted">
+          사무실 {siteConfig.phone}<br />
+          팩스 {siteConfig.fax}<br />
+          {siteConfig.businessHours}
+        </p>
+      </div>
     </div>
 
-    <p class="mt-8 border-t border-border pt-5 text-xs text-foreground-muted">
-      &copy; {currentYear} {siteConfig.companyName}. All rights reserved.
+    <p class="mt-12 border-t border-white/10 pt-6 text-xs text-on-deep-muted">
+      &copy; {currentYear} {siteConfig.companyName}
     </p>
   </div>
 </footer>

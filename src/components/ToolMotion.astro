@@ -1,0 +1,391 @@
+---
+/*
+ * 섹션 옆에 붙는 도구 모션. 사람 없이 도구만 나온다.
+ *
+ * 공통 규칙: 도구는 오른쪽 끝의 가상의 세로선(x = TARGET_X)을 기준으로 작업하고,
+ * 그 선을 따라 위 → 중간 → 아래 → 중간 → 위 순서로 오르내리며 각 지점에서 한 번씩 동작한다.
+ *   - 렌치: 각 지점에서 너트가 나타나고, 렌치가 조인 뒤 너트가 사라진다
+ *   - 그라인더: 날이 돌면서 각 지점에서 불꽃이 튄다
+ *   - 용접: 각 지점에서 아크가 한 번씩 터진다
+ *
+ * 장식이므로 aria-hidden.
+ */
+interface Props {
+  tool: "wrench" | "grinder" | "welder";
+  side?: "left" | "right";
+  class?: string;
+}
+
+const { tool, side = "right", class: className = "" } = Astro.props;
+
+// 도구가 작업하는 가상의 세로선과 정지 지점
+const TARGET_X = 150;
+const STOP_MID = 130;
+
+const TOOTH_COUNT = 36;
+const BLADE_R = 40;
+const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
+  const a = (i / TOOTH_COUNT) * Math.PI * 2;
+  return {
+    x1: TARGET_X - 46 + Math.cos(a) * (BLADE_R - 4),
+    y1: STOP_MID + Math.sin(a) * (BLADE_R - 4),
+    x2: TARGET_X - 46 + Math.cos(a) * (BLADE_R + 5),
+    y2: STOP_MID + Math.sin(a) * (BLADE_R + 5),
+  };
+});
+---
+
+<div class:list={["tool-motion", `side-${side}`, `tool-${tool}`, className]} aria-hidden="true">
+  <svg viewBox="0 0 180 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 작업 기준선 -->
+    <line x1={TARGET_X} y1="34" x2={TARGET_X} y2="226" stroke="var(--color-sea-soft)" stroke-width="6" stroke-linecap="round" />
+
+    <g class="rig">
+      {
+        tool === "wrench" && (
+          <g stroke-linecap="round" stroke-linejoin="round">
+            {/* 조여지는 너트 */}
+            <g class="nut">
+              <path
+                d={`M${TARGET_X} ${STOP_MID - 15} L${TARGET_X + 13} ${STOP_MID - 7.5} L${TARGET_X + 13} ${STOP_MID + 7.5} L${TARGET_X} ${STOP_MID + 15} L${TARGET_X - 13} ${STOP_MID + 7.5} L${TARGET_X - 13} ${STOP_MID - 7.5} Z`}
+                fill="var(--color-sea-soft)"
+                stroke="var(--color-sea-deep)"
+                stroke-width="6"
+              />
+            </g>
+            {/* 렌치: 오른쪽으로 벌어진 물림쇠 + 왼쪽 아래로 뻗은 손잡이 */}
+            <g class="wrench-head">
+              <path
+                d={`M${TARGET_X - 42} ${STOP_MID - 20} L${TARGET_X - 14} ${STOP_MID - 20} L${TARGET_X - 14} ${STOP_MID - 9} L${TARGET_X - 26} ${STOP_MID - 9} L${TARGET_X - 26} ${STOP_MID + 9} L${TARGET_X - 14} ${STOP_MID + 9} L${TARGET_X - 14} ${STOP_MID + 20} L${TARGET_X - 42} ${STOP_MID + 20} Z`}
+                fill="var(--color-sea)"
+                stroke="var(--color-sea-deep)"
+                stroke-width="5"
+              />
+              <line
+                x1={TARGET_X - 40}
+                y1={STOP_MID}
+                x2={TARGET_X - 108}
+                y2={STOP_MID + 40}
+                stroke="var(--color-sea)"
+                stroke-width="17"
+              />
+              <line
+                x1={TARGET_X - 74}
+                y1={STOP_MID + 20}
+                x2={TARGET_X - 96}
+                y2={STOP_MID + 33}
+                stroke="var(--color-sunset)"
+                stroke-width="8"
+              />
+            </g>
+          </g>
+        )
+      }
+      {
+        tool === "grinder" && (
+          <g>
+            <g class="blade">
+              <circle cx={TARGET_X - 46} cy={STOP_MID} r={BLADE_R} stroke="var(--color-sea)" stroke-width="8" fill="var(--color-surface)" />
+              {teeth.map((t) => (
+                <line x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="var(--color-sea-deep)" stroke-width="4" stroke-linecap="round" />
+              ))}
+              <circle cx={TARGET_X - 46} cy={STOP_MID} r="11" stroke="var(--color-sea-deep)" stroke-width="7" fill="none" />
+            </g>
+            <g class="zap">
+              <circle class="spark s1" cx={TARGET_X - 14} cy={STOP_MID + 22} r="5" fill="var(--color-sunset)" />
+              <circle class="spark s2" cx={TARGET_X - 14} cy={STOP_MID + 22} r="4" fill="var(--color-sun)" />
+              <circle class="spark s3" cx={TARGET_X - 14} cy={STOP_MID + 22} r="3.5" fill="var(--color-sunset)" />
+            </g>
+          </g>
+        )
+      }
+      {
+        tool === "welder" && (
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <path d={`M${TARGET_X - 112} ${STOP_MID + 54} L${TARGET_X - 56} ${STOP_MID + 14}`} stroke="var(--color-sea-deep)" stroke-width="20" />
+            <path d={`M${TARGET_X - 100} ${STOP_MID + 40} L${TARGET_X - 80} ${STOP_MID + 26}`} stroke="var(--color-sea-soft)" stroke-width="7" />
+            <path d={`M${TARGET_X - 56} ${STOP_MID + 14} L${TARGET_X - 26} ${STOP_MID + 2}`} stroke="var(--color-sea)" stroke-width="13" />
+            <g class="zap">
+              <circle class="arc-glow" cx={TARGET_X - 8} cy={STOP_MID - 4} r="22" fill="var(--color-sunset-soft)" />
+              <circle class="arc-core" cx={TARGET_X - 8} cy={STOP_MID - 4} r="9" fill="var(--color-sun)" />
+            </g>
+          </g>
+        )
+      }
+    </g>
+  </svg>
+</div>
+
+<style>
+  .tool-motion {
+    position: absolute;
+    top: 50%;
+    width: 11rem;
+    opacity: 0.95;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+  /* 오른쪽 끝 기준선을 섹션 가장자리에 맞춘다 */
+  .tool-motion.side-right {
+    right: -5.5rem;
+  }
+  .tool-motion.side-left {
+    left: -5.5rem;
+    transform: translateY(-50%) scaleX(-1);
+  }
+  .tool-motion svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 좁은 화면에서는 섹션 오른쪽 위 여백으로 옮기고 작게 */
+  @media (max-width: 1240px) {
+    .tool-motion {
+      top: 0.5rem;
+      width: 4.75rem;
+      opacity: 0.65;
+      transform: none;
+    }
+    .tool-motion.side-right {
+      right: 0.25rem;
+    }
+    .tool-motion.side-left {
+      left: auto;
+      right: 0.25rem;
+      transform: scaleX(-1);
+    }
+  }
+
+  /*
+   * 위 → 중간 → 아래 → 중간 → 위. 각 지점에서 멈춰 한 번 작업한다.
+   * (한 주기 12s: 정지 5회 × 약 1.1s + 이동 4회)
+   */
+  .rig {
+    animation: travel 12s ease-in-out infinite;
+  }
+  @keyframes travel {
+    0%,
+    9% {
+      transform: translateY(-72px);
+    }
+    16%,
+    25% {
+      transform: translateY(0px);
+    }
+    32%,
+    41% {
+      transform: translateY(72px);
+    }
+    48%,
+    57% {
+      transform: translateY(0px);
+    }
+    64%,
+    73% {
+      transform: translateY(-72px);
+    }
+    80%,
+    89% {
+      transform: translateY(0px);
+    }
+    96%,
+    100% {
+      transform: translateY(-72px);
+    }
+  }
+
+  /* 정지한 순간에만 동작 (뚝딱 / 치지직) */
+  .wrench-head {
+    transform-origin: 108px 130px;
+    animation: tighten 12s ease-in-out infinite;
+  }
+  @keyframes tighten {
+    0%,
+    3%,
+    12%,
+    19%,
+    28%,
+    35%,
+    44%,
+    51%,
+    60%,
+    67%,
+    76%,
+    83%,
+    92%,
+    100% {
+      transform: rotate(0deg);
+    }
+    5%,
+    21%,
+    37%,
+    53%,
+    69%,
+    85% {
+      transform: rotate(-17deg);
+    }
+  }
+
+  .nut {
+    opacity: 0;
+    animation: nut-cycle 12s ease-in-out infinite;
+  }
+  @keyframes nut-cycle {
+    0%,
+    10% {
+      opacity: 1;
+    }
+    12%,
+    14% {
+      opacity: 0;
+    }
+    16%,
+    26% {
+      opacity: 1;
+    }
+    28%,
+    30% {
+      opacity: 0;
+    }
+    32%,
+    42% {
+      opacity: 1;
+    }
+    44%,
+    46% {
+      opacity: 0;
+    }
+    48%,
+    58% {
+      opacity: 1;
+    }
+    60%,
+    62% {
+      opacity: 0;
+    }
+    64%,
+    74% {
+      opacity: 1;
+    }
+    76%,
+    78% {
+      opacity: 0;
+    }
+    80%,
+    90% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .blade {
+    transform-origin: 104px 130px;
+    animation: blade-spin 3.2s linear infinite;
+  }
+  @keyframes blade-spin {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  .spark {
+    opacity: 0;
+    animation: spark-fly 12s ease-out infinite;
+  }
+  .s2 {
+    animation-delay: 0.25s;
+  }
+  .s3 {
+    animation-delay: 0.5s;
+  }
+  @keyframes spark-fly {
+    0%,
+    16%,
+    32%,
+    48%,
+    64%,
+    80% {
+      opacity: 0.95;
+      transform: translate(0, 0) scale(1);
+    }
+    8%,
+    24%,
+    40%,
+    56%,
+    72%,
+    88% {
+      opacity: 0;
+      transform: translate(-26px, 24px) scale(0.35);
+    }
+    9%,
+    25%,
+    41%,
+    57%,
+    73%,
+    89%,
+    100% {
+      opacity: 0;
+      transform: translate(0, 0) scale(1);
+    }
+  }
+
+  .arc-glow,
+  .arc-core {
+    transform-origin: 142px 126px;
+    animation: arc-zap 12s ease-in-out infinite;
+  }
+  .arc-core {
+    animation-delay: 0.08s;
+  }
+  @keyframes arc-zap {
+    0%,
+    6%,
+    16%,
+    22%,
+    32%,
+    38%,
+    48%,
+    54%,
+    64%,
+    70%,
+    80%,
+    86%,
+    100% {
+      opacity: 0.28;
+      transform: scale(0.72);
+    }
+    3%,
+    19%,
+    35%,
+    51%,
+    67%,
+    83% {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rig,
+    .wrench-head,
+    .nut,
+    .blade,
+    .spark,
+    .arc-glow,
+    .arc-core {
+      animation: none;
+    }
+    .nut,
+    .spark {
+      opacity: 0.8;
+    }
+    .arc-glow,
+    .arc-core {
+      opacity: 0.6;
+    }
+  }
+</style>

@@ -1,24 +1,48 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import ToolMotion from "@/components/ToolMotion.astro";
+import KakaoChannelButton from "@/components/KakaoChannelButton.astro";
 import { services } from "@/content/services";
+import { siteConfig } from "@/lib/site";
 ---
 
-<BaseLayout title="서비스" description="해나루 종합설비가 제공하는 서비스">
-  <section class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="text-sm font-medium text-primary">서비스</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-[-0.02em] text-foreground">
-      취급 업무
-    </h1>
+<BaseLayout title="서비스" description="해나루 종합설비가 하는 일">
+  <PageHeader
+    eyebrow="이런 일을 합니다"
+    title="집에서 물과 불에 관한 건 대부분 고칩니다"
+    lead="아래 일들은 모두 대표가 직접 나가서 시공합니다. 여기에 없는 일도 일단 전화 주시면 봐 드릴 수 있는지 알려드립니다."
+  />
 
-    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+  <section class="relative mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16">
+    <ToolMotion tool="grinder" side="right" />
+    <div class="grid gap-4 sm:grid-cols-2">
       {
         services.map((service) => (
-          <div class="rounded-lg border border-border bg-surface p-6">
-            <h2 class="text-base font-semibold text-foreground">{service.title}</h2>
-            <p class="mt-1.5 text-sm leading-relaxed text-foreground-muted">{service.description}</p>
+          <div class="rounded-xl border border-border bg-surface p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-ink">{service.title}</h2>
+            <p class="mt-2 text-base leading-[1.8] text-ink-muted">{service.description}</p>
           </div>
         ))
       }
+    </div>
+  </section>
+
+  <section class="bg-sea-pale">
+    <div class="mx-auto max-w-xl px-4 py-14 text-center sm:px-6">
+      <h2 class="font-display text-xl leading-snug text-ink sm:text-2xl">
+        어떤 일인지 애매하면 그냥 전화 주세요
+      </h2>
+      <p class="mt-3 text-base leading-[1.8] text-ink-muted">상황만 들어도 대충 견적이 나옵니다.</p>
+      <div class="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <a
+          href={`tel:${siteConfig.mobile}`}
+          class="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground shadow-sm transition-transform active:scale-[0.97] sm:w-auto"
+        >
+          전화 걸기
+        </a>
+        <KakaoChannelButton label="카카오톡 문의" class="w-full px-6 py-3.5 text-base sm:w-auto" always />
+      </div>
     </div>
   </section>
 </BaseLayout>

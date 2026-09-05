@@ -1,29 +1,55 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import ToolMotion from "@/components/ToolMotion.astro";
 import KakaoChannelButton from "@/components/KakaoChannelButton.astro";
 import { siteConfig } from "@/lib/site";
 ---
 
-<BaseLayout title="문의" description="전화 또는 카카오톡 채널로 문의해 주세요">
-  <section class="mx-auto max-w-xl px-4 py-16 text-center sm:px-6 sm:py-24">
-    <p class="text-sm font-medium text-primary">문의</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-[-0.02em] text-foreground">
-      편하신 방법으로 연락해 주세요
-    </h1>
-    <p class="mt-3 text-base leading-relaxed text-foreground-muted">
-      전화 또는 카카오톡 채널로 바로 상담 받으실 수 있습니다.
-    </p>
+<BaseLayout title="문의" description="전화 또는 카카오톡으로 연락 주세요">
+  <PageHeader
+    eyebrow="문의"
+    title="편한 방법으로 연락 주세요"
+    lead="어디가 어떻게 안 되는지만 말씀해 주시면 됩니다. 사진이 있으면 더 좋고요."
+  />
 
-    <div class="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-      <a
-        href={`tel:${siteConfig.mobile}`}
-        class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-sm transition-transform active:scale-[0.97] sm:w-auto"
-      >
-        전화 걸기 ({siteConfig.mobile})
-      </a>
-      <KakaoChannelButton label="카카오톡 문의" class="w-full px-6 py-3.5 text-base sm:w-auto" />
+  <section class="relative mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-16">
+    <ToolMotion tool="welder" side="right" />
+
+    <div class="rounded-xl border border-border bg-surface p-6 text-center sm:p-8">
+      <p class="text-base text-ink-muted">휴대폰</p>
+      <p class="mt-1 font-display text-[clamp(1.5rem,5vw,2rem)] text-ink">{siteConfig.mobile}</p>
+
+      <div class="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <a
+          href={`tel:${siteConfig.mobile}`}
+          class="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground shadow-sm transition-transform active:scale-[0.97] sm:w-auto"
+        >
+          전화 걸기
+        </a>
+        <KakaoChannelButton label="카카오톡 문의" class="w-full px-6 py-3.5 text-base sm:w-auto" always />
+      </div>
     </div>
 
-    <p class="mt-8 text-sm text-foreground-muted">{siteConfig.businessHours}</p>
+    <dl class="mt-6 grid gap-5 rounded-xl border border-border bg-surface p-6 sm:grid-cols-2">
+      <div>
+        <dt class="text-sm text-ink-muted">사무실 전화</dt>
+        <dd class="mt-1 font-semibold text-ink">
+          <a href={`tel:${siteConfig.phone}`} class="hover:text-sea-deep">{siteConfig.phone}</a>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-sm text-ink-muted">팩스</dt>
+        <dd class="mt-1 font-semibold text-ink">{siteConfig.fax}</dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="text-sm text-ink-muted">영업시간</dt>
+        <dd class="mt-1 font-semibold text-ink">{siteConfig.businessHours}</dd>
+      </div>
+    </dl>
+
+    <p class="mt-6 text-center text-base leading-[1.8] text-ink-muted">
+      영업시간이 지났더라도 급한 일이면 우선 전화 주세요.
+    </p>
   </section>
 </BaseLayout>

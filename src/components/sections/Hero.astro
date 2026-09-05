@@ -1,0 +1,118 @@
+---
+import WorkerScenes from "@/components/WorkerScenes.astro";
+import KakaoChannelButton from "@/components/KakaoChannelButton.astro";
+import { siteConfig } from "@/lib/site";
+---
+
+<section class="hero">
+  <!-- min-w-0: 플렉스 자식이 내용 너비만큼 벌어져 모바일에서 가로로 넘치는 것을 막는다 -->
+  <div class="mx-auto grid w-full min-w-0 max-w-5xl items-center gap-10 px-4 sm:px-6 md:grid-cols-2 md:gap-12">
+    <div class="text-center md:text-left">
+      <p class="text-sm font-semibold tracking-[0.02em] text-sea-deep sm:text-base">
+        충남 당진시 대덕동 · 난방시공업2종 · 가스시설시공업3종
+      </p>
+      <h1 class="mt-3 font-display text-[clamp(2rem,5.5vw,3.25rem)] leading-[1.35] tracking-[-0.01em] text-ink">
+        보일러가 고장 나면<br />언제든 전화 주세요
+      </h1>
+      <p class="mx-auto mt-4 max-w-md text-base leading-[1.8] text-ink-muted sm:text-lg md:mx-0">
+        당진에서 배관·보일러·난방을 고칩니다.<br />
+        대표 {siteConfig.ceoName}이 직접 나갑니다.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+        <a
+          href={`tel:${siteConfig.mobile}`}
+          class="inline-flex items-center rounded-full bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground shadow-sm transition-transform active:scale-[0.97]"
+        >
+          전화 걸기
+        </a>
+        <KakaoChannelButton label="카카오톡 문의" class="px-6 py-3.5 text-base" always />
+      </div>
+    </div>
+
+    <div class="order-first md:order-none">
+      <div class="mx-auto w-full max-w-[15rem] sm:max-w-xs md:max-w-none">
+        <WorkerScenes />
+      </div>
+    </div>
+  </div>
+
+  <a href="#services" class="scroll-cue" aria-label="아래 내용 보기">
+    <svg width="30" height="34" viewBox="0 0 30 34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path class="chev chev-1" d="M7 10l8 8 8-8" />
+      <path class="chev chev-2" d="M7 20l8 8 8-8" />
+    </svg>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    /* 헤더(약 4rem)를 뺀 첫 화면 전체를 채우되, 안의 내용은 세로 가운데 정렬 */
+    min-height: calc(100svh - 4rem);
+    display: flex;
+    align-items: center;
+    padding-block: 2rem 6rem;
+    scroll-margin-top: 4rem;
+    background:
+      radial-gradient(120% 90% at 85% 10%, var(--color-sunset-soft) 0%, transparent 55%),
+      radial-gradient(110% 80% at 10% 90%, var(--color-sea-pale) 0%, transparent 60%),
+      var(--color-background);
+  }
+
+  /*
+   * 스크롤 안내: 배경 블록 없이 화살표 두 개만.
+   * 두 화살표가 시간차를 두고 아래로 흐르며 방향을 가리킨다 (누르면 부드럽게 이동 - globals.css).
+   */
+  .scroll-cue {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-sea-deep);
+    text-decoration: none;
+    transition: transform 160ms ease;
+  }
+  /* 누르는 순간 바로 반응 */
+  .scroll-cue:active {
+    transform: translateX(-50%) scale(0.94);
+  }
+
+  .chev {
+    animation: chev-flow 2.4s ease-in-out infinite;
+  }
+  .chev-2 {
+    animation-delay: 0.18s;
+  }
+
+  @keyframes chev-flow {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: translateY(-2px);
+    }
+    45% {
+      opacity: 1;
+      transform: translateY(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chev {
+      animation: none;
+      opacity: 0.8;
+    }
+  }
+
+  /*
+   * 좁은 화면: 내용을 위쪽에 붙여 상단 여백이 과하게 벌어지지 않게 한다.
+   * (첫 화면은 그대로 꽉 채우고, 남는 공간은 화살표가 있는 아래쪽으로 몰아준다.)
+   */
+  @media (max-width: 767px) {
+    .hero {
+      align-items: flex-start;
+      padding-block: 0.75rem 5rem;
+    }
+  }
+</style>

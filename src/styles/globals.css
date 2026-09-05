@@ -2,8 +2,48 @@
 @import "./tokens.css";
 
 @layer base {
+  /*
+   * 앵커 이동은 끊기지 않고 미끄러지듯 흐르게. 브라우저 기본 스크롤이라
+   * 사용자가 중간에 손으로 스크롤하면 즉시 그 조작이 우선한다.
+   */
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
-    color: var(--color-foreground);
+    color: var(--color-ink);
+    /* 한국어는 단어 중간에서 끊으면 읽기 나쁘다. 어절 단위로만 줄바꿈. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* 제목은 줄 길이를 고르게 */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* 고정 헤더에 가리지 않도록 앵커 도착 지점에 여유를 준다 */
+  :target,
+  [id] {
+    scroll-margin-top: 4.5rem;
+  }
+
+  /*
+   * 키보드로 이동할 때 지금 어디에 있는지 항상 보이게 한다.
+   * 마우스 클릭에는 뜨지 않도록 :focus-visible만 사용.
+   */
+  :focus-visible {
+    outline: 3px solid var(--color-sea);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }

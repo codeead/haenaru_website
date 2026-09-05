@@ -2,7 +2,7 @@ backend:
   name: git-gateway
   branch: main
 
-# GitHub Pages 커스텀 도메인이 정해지면 실제 도메인으로 교체 (미리보기 링크 생성에 사용됨)
+# 미리보기 링크 생성에 사용 — astro.config.mjs 의 site 값과 항상 동일하게 유지
 site_url: https://example.com
 publish_mode: simple
 
@@ -39,7 +39,13 @@ collections:
         name: "photos"
         widget: "list"
         required: false
-        field: { label: "사진", name: "photo", widget: "image" }
+        fields:
+          - { label: "사진", name: "src", widget: "image" }
+          - label: "이 사진 설명 (한 줄)"
+            name: "alt"
+            widget: "string"
+            required: false
+            hint: "예: 교체 전 배관 상태. 시각장애인용 화면읽기 프로그램에서 읽어주는 설명입니다."
       - { label: "설명", name: "body", widget: "markdown", required: false }
       - label: "임시저장(사이트에 아직 공개 안 함)"
         name: "draft"

@@ -1,0 +1,33 @@
+---
+/*
+ * 하위 페이지 공통 머리 영역. 홈의 히어로와 같은 파스텔 배경을 얕게 깔아
+ * 페이지마다 톤이 끊기지 않게 한다.
+ */
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}
+
+const { eyebrow, title, lead } = Astro.props;
+---
+
+<section class="page-header">
+  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+    <p class="text-sm font-semibold tracking-[0.02em] text-sea-deep sm:text-base">{eyebrow}</p>
+    <h1 class="mt-2 font-display text-[clamp(1.7rem,4.5vw,2.5rem)] leading-snug text-ink">
+      {title}
+    </h1>
+    {lead && <p class="mt-4 max-w-xl text-base leading-[1.9] text-ink-muted sm:text-lg">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .page-header {
+    background:
+      radial-gradient(110% 120% at 88% 0%, var(--color-sunset-soft) 0%, transparent 60%),
+      radial-gradient(100% 130% at 4% 100%, var(--color-sea-pale) 0%, transparent 62%),
+      var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+  }
+</style>

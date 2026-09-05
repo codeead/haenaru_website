@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import HeroCarousel from "@/components/sections/HeroCarousel.astro";
+import Hero from "@/components/sections/Hero.astro";
+import ServicesSummary from "@/components/sections/ServicesSummary.astro";
 import RepairHistory from "@/components/sections/RepairHistory.astro";
+import ContactCta from "@/components/sections/ContactCta.astro";
 import { siteConfig } from "@/lib/site";
 ---
 
-<BaseLayout title="홈" description={siteConfig.tagline}>
-  <HeroCarousel />
+<BaseLayout title="홈" description={`${siteConfig.address} · 배관·보일러·난방 시공`}>
+  <Hero />
+  <ServicesSummary />
   <RepairHistory />
+  <ContactCta />
 </BaseLayout>

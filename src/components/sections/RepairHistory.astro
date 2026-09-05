@@ -1,31 +1,56 @@
 ---
 import { getCollection } from "astro:content";
 import WorkCard from "@/components/WorkCard.astro";
+import ToolMotion from "@/components/ToolMotion.astro";
 
 const allWorks = await getCollection("works", ({ data }) => !data.draft);
 const recentWorks = allWorks
   .sort((a, b) => b.data.workedAt.getTime() - a.data.workedAt.getTime())
   .slice(0, 3);
+const [featuredWork, ...restWorks] = recentWorks;
 ---
 
-<section class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-  <div class="flex items-end justify-between">
+<section id="works-preview" class="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
+  <div class="flex items-end justify-between gap-6 border-b border-border pb-5">
     <div>
-      <h2 class="text-xl font-bold tracking-[-0.01em] text-foreground sm:text-2xl">최근 수리 이력</h2>
-      <p class="mt-1.5 text-sm text-foreground-muted">현장에서 직접 진행한 시공 사례입니다</p>
+      <p class="text-sm font-semibold tracking-[0.02em] text-sea-deep">시공 기록</p>
+      <h2 class="mt-1.5 font-display text-2xl leading-snug text-ink sm:text-3xl">최근 수리 이력</h2>
     </div>
-    <a href="/works" class="shrink-0 text-sm font-medium text-primary">전체보기 →</a>
+    <a
+      href="/works"
+      class="shrink-0 text-sm font-semibold text-sea-deep underline-offset-4 hover:underline"
+    >
+      전체보기 →
+    </a>
   </div>
 
-  {
-    recentWorks.length > 0 ? (
-      <div class="mt-8 grid gap-5 sm:grid-cols-3">
-        {recentWorks.map((work) => <WorkCard work={work} />)}
-      </div>
-    ) : (
-      <div class="mt-8 rounded-lg border border-dashed border-border bg-surface px-6 py-14 text-center">
-        <p class="text-sm text-foreground-muted">등록된 수리 이력이 곧 표시됩니다.</p>
-      </div>
-    )
-  }
+  <!-- 그라인더는 이 콘텐츠 칸을 기준으로 세로 가운데에 붙는다 -->
+  <div class="relative mt-8">
+    <ToolMotion tool="grinder" side="right" />
+    {
+      !featuredWork ? (
+        <div class="rounded-xl border border-border bg-surface px-6 py-16 text-center shadow-sm">
+          <p class="text-base text-ink-muted">첫 번째 시공 사진을 정리하고 있습니다. 곧 올라옵니다.</p>
+        </div>
+      ) : restWorks.length === 2 ? (
+        <div class="grid gap-5 sm:grid-cols-2 sm:grid-rows-2">
+          <div class="sm:row-span-2">
+            <WorkCard work={featuredWork} featured />
+          </div>
+          {restWorks.map((work) => (
+            <WorkCard work={work} />
+          ))}
+        </div>
+      ) : restWorks.length === 1 ? (
+        <div class="grid gap-5 sm:grid-cols-2">
+          <WorkCard work={featuredWork} featured />
+          <WorkCard work={restWorks[0]} />
+        </div>
+      ) : (
+        <div class="max-w-md">
+          <WorkCard work={featuredWork} featured />
+        </div>
+      )
+    }
+  </div>
 </section>

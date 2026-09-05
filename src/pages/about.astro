@@ -1,31 +1,32 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import ToolMotion from "@/components/ToolMotion.astro";
 import { aboutParagraphs } from "@/content/about";
 import { siteConfig } from "@/lib/site";
 ---
 
 <BaseLayout title="회사소개" description={`${siteConfig.companyName} 소개`}>
-  <section class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="text-sm font-medium text-primary">회사소개</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-[-0.02em] text-foreground">
-      {siteConfig.companyName}
-    </h1>
-    <div class="mt-8 space-y-5">
-      {aboutParagraphs.map((p) => <p class="text-base leading-[1.8] text-foreground-muted">{p}</p>)}
+  <PageHeader eyebrow="회사소개" title="당진에서 설비 일을 합니다" />
+
+  <section class="relative mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-16">
+    <ToolMotion tool="wrench" side="right" />
+    <div class="space-y-5">
+      {aboutParagraphs.map((p) => <p class="text-base leading-[1.9] text-ink-muted sm:text-lg">{p}</p>)}
     </div>
 
-    <dl class="mt-10 grid gap-4 rounded-lg border border-border bg-surface p-6 text-sm sm:grid-cols-2">
+    <dl class="mt-10 grid gap-5 rounded-xl border border-border bg-surface p-6 sm:grid-cols-2">
       <div>
-        <dt class="text-foreground-muted">대표</dt>
-        <dd class="mt-0.5 font-medium text-foreground">{siteConfig.ceoName}</dd>
+        <dt class="text-sm text-ink-muted">대표</dt>
+        <dd class="mt-1 font-semibold text-ink">{siteConfig.ceoName}</dd>
       </div>
       <div>
-        <dt class="text-foreground-muted">등록업체</dt>
-        <dd class="mt-0.5 font-medium text-foreground">{siteConfig.registrations.join(", ")}</dd>
+        <dt class="text-sm text-ink-muted">등록업체</dt>
+        <dd class="mt-1 font-semibold text-ink">{siteConfig.registrations.join(", ")}</dd>
       </div>
       <div class="sm:col-span-2">
-        <dt class="text-foreground-muted">위치</dt>
-        <dd class="mt-0.5 font-medium text-foreground">{siteConfig.address}</dd>
+        <dt class="text-sm text-ink-muted">일하는 곳</dt>
+        <dd class="mt-1 font-semibold text-ink">{siteConfig.address}</dd>
       </div>
     </dl>
   </section>

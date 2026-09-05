@@ -1,27 +1,31 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import WorkCard from "@/components/WorkCard.astro";
 
 const allWorks = await getCollection("works", ({ data }) => !data.draft);
 const sortedWorks = allWorks.sort((a, b) => b.data.workedAt.getTime() - a.data.workedAt.getTime());
 ---
 
-<BaseLayout title="수리 이력" description="해나루 종합설비가 진행한 시공 사례">
-  <section class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="text-sm font-medium text-primary">수리 이력</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-[-0.02em] text-foreground">
-      현장 시공 사례
-    </h1>
+<BaseLayout title="수리 이력" description="해나루 종합설비가 다녀온 현장">
+  <PageHeader
+    eyebrow="수리 이력"
+    title="다녀온 현장을 그때그때 올립니다"
+    lead="어떤 집에서 무엇을 고쳤는지 사진과 함께 남겨두고 있습니다."
+  />
 
+  <section class="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16">
     {
       sortedWorks.length > 0 ? (
-        <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {sortedWorks.map((work) => <WorkCard work={work} />)}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {sortedWorks.map((work) => (
+            <WorkCard work={work} headingLevel="h2" />
+          ))}
         </div>
       ) : (
-        <div class="mt-10 rounded-lg border border-dashed border-border bg-surface px-6 py-20 text-center">
-          <p class="text-sm text-foreground-muted">등록된 수리 이력이 곧 표시됩니다.</p>
+        <div class="rounded-xl border border-dashed border-border bg-surface px-6 py-20 text-center">
+          <p class="text-base text-ink-muted">첫 번째 시공 사진을 정리하고 있습니다. 곧 올라옵니다.</p>
         </div>
       )
     }

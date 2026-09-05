@@ -1,38 +1,46 @@
 ---
+/*
+ * 카카오톡 채널 채팅 버튼.
+ * 채널 링크는 CMS "사이트 설정"의 kakaoChannelUrl 한 칸으로 관리한다.
+ *
+ * 링크가 아직 없을 때:
+ *  - 기본값은 아예 그리지 않는다 (전화 버튼과 같은 동작을 하는 버튼이 둘 서는 걸 막는다).
+ *  - always를 주면 자리를 지키되 눌리지 않는 "준비 중" 상태로 보여준다. 링크를 넣는 순간 바로 살아난다.
+ */
 import { siteConfig } from "@/lib/site";
 
 interface Props {
   label?: string;
   class?: string;
+  always?: boolean;
 }
 
-const { label = "카카오톡 문의", class: className = "" } = Astro.props;
-const hasChannel = siteConfig.kakaoChannelUrl.trim().length > 0;
+const { label = "카카오톡 문의", class: className = "", always = false } = Astro.props;
+const channelUrl = siteConfig.kakaoChannelUrl.trim();
+const base =
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold shadow-sm transition-transform";
 ---
 
 {
-  hasChannel ? (
+  channelUrl.length > 0 ? (
     <a
-      href={siteConfig.kakaoChannelUrl}
+      href={channelUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class:list={[
-        "inline-flex items-center justify-center gap-2 rounded-full bg-[#FEE500] px-5 py-3 text-sm font-semibold text-[#3C1E1E] shadow-sm transition-transform active:scale-[0.97]",
-        className,
-      ]}
+      class:list={[base, "bg-[#FEE500] text-[#3C1E1E] active:scale-[0.97]", className]}
     >
       {label}
     </a>
   ) : (
-    <a
-      href={`tel:${siteConfig.mobile}`}
-      class:list={[
-        "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-transform active:scale-[0.97]",
-        className,
-      ]}
-      title="카카오톡 채널 준비 중 — 우선 전화로 문의해 주세요"
-    >
-      전화 문의 ({siteConfig.mobile})
-    </a>
+    always && (
+      <span
+        class:list={[base, "cursor-not-allowed bg-[#FEE500]/45 text-[#3C1E1E]/55", className]}
+        aria-disabled="true"
+        data-state="준비중"
+        title="카카오톡 채널 준비 중입니다. 지금은 전화로 연락해 주세요."
+      >
+        {label}
+      </span>
+    )
   )
 }

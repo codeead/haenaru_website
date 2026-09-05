@@ -1,31 +1,33 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import { siteConfig } from "@/lib/site";
 
 const searchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(siteConfig.address)}`;
-const mapEmbedUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteConfig.companyName)},${encodeURIComponent(siteConfig.address)}`;
+const routeUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteConfig.companyName)},${encodeURIComponent(siteConfig.address)}`;
 ---
 
 <BaseLayout title="오시는 길" description={siteConfig.address}>
-  <section class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="text-sm font-medium text-primary">오시는 길</p>
-    <h1 class="mt-2 text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-[-0.02em] text-foreground">
-      {siteConfig.companyName}
-    </h1>
+  <PageHeader
+    eyebrow="오시는 길"
+    title="당진시 대덕동에 있습니다"
+    lead="대부분은 저희가 현장으로 나가지만, 들르실 일이 있으면 아래 주소로 오시면 됩니다."
+  />
 
-    <dl class="mt-8 space-y-5 rounded-lg border border-border bg-surface p-6">
+  <section class="mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-16">
+    <dl class="space-y-6 rounded-xl border border-border bg-surface p-6 sm:p-8">
       <div>
-        <dt class="text-sm text-foreground-muted">주소</dt>
-        <dd class="mt-1 text-base font-medium text-foreground">{siteConfig.address}</dd>
+        <dt class="text-sm text-ink-muted">주소</dt>
+        <dd class="mt-1 text-lg font-semibold text-ink">{siteConfig.address}</dd>
       </div>
       <div>
-        <dt class="text-sm text-foreground-muted">영업시간</dt>
-        <dd class="mt-1 text-base font-medium text-foreground">{siteConfig.businessHours}</dd>
+        <dt class="text-sm text-ink-muted">영업시간</dt>
+        <dd class="mt-1 text-lg font-semibold text-ink">{siteConfig.businessHours}</dd>
       </div>
       <div>
-        <dt class="text-sm text-foreground-muted">연락처</dt>
-        <dd class="mt-1 text-base font-medium text-foreground">
-          <a href={`tel:${siteConfig.mobile}`} class="hover:text-primary">{siteConfig.mobile}</a>
+        <dt class="text-sm text-ink-muted">연락처</dt>
+        <dd class="mt-1 text-lg font-semibold text-ink">
+          <a href={`tel:${siteConfig.mobile}`} class="hover:text-sea-deep">{siteConfig.mobile}</a>
         </dd>
       </div>
     </dl>
@@ -35,15 +37,15 @@ const mapEmbedUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteCon
         href={searchUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center justify-center rounded-full border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition-transform active:scale-[0.97]"
+        class="inline-flex items-center justify-center rounded-full border-2 border-sea bg-surface px-5 py-3.5 text-base font-bold text-sea-deep transition-transform active:scale-[0.97]"
       >
         카카오맵에서 보기
       </a>
       <a
-        href={mapEmbedUrl}
+        href={routeUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-transform active:scale-[0.97]"
+        class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3.5 text-base font-bold text-primary-foreground shadow-sm transition-transform active:scale-[0.97]"
       >
         길찾기
       </a>

@@ -14,7 +14,9 @@ const works = defineCollection({
       workedAt: z.coerce.date(),
       locationRegion: z.string(),
       coverImage: image(),
-      photos: z.array(image()).default([]),
+      photos: z
+        .array(z.object({ src: image(), alt: z.string().default("") }))
+        .default([]),
       draft: z.boolean().default(false),
     }),
 });

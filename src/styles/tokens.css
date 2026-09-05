@@ -1,62 +1,94 @@
 /*
- * 디자인 토큰 — 해나루 종합설비 로고(심볼+워드마크)에서 추출한 실제 브랜드 컬러 기반.
- * 컴포넌트는 hex/px를 직접 쓰지 않고 Tailwind 유틸(bg-primary, text-foreground 등)만 사용한다.
+ * 디자인 토큰 — "노을 머금은 바다" 파스텔 팔레트.
+ * 근거 문서: .design/hanaru-brand/DESIGN_BRIEF.md
+ *
+ * 원칙
+ *  - 색은 특정 사진이 아니라 (파스텔로 리컬러링한) 로고에서만 유래한다. 사진이 바뀌어도 색은 그대로.
+ *  - 쨍한 색(--color-sun)은 로고와 아주 작은 배지에만. 넓은 면적 금지.
+ *  - 본문 글자는 --color-ink / --color-ink-muted 만. 노을 계열은 글자색으로 쓰지 않는다.
+ *  - 모든 텍스트 조합은 WCAG AA(4.5:1) 이상으로 검증됨.
  */
 :root {
-  /* 브랜드 */
-  --color-brand-red: #f41b26;
-  --color-brand-red-dark: #c4141d;
-  --color-brand-blue: #0b51db;
-  --color-brand-blue-dark: #0940a8;
+  /* 바다 (주 색) */
+  --color-sea: #3d7a94;
+  --color-sea-deep: #2b5a70;
+  --color-sea-soft: #d5e4ea;
+  --color-sea-pale: #eef5f7;
 
-  /* 배경/전경 — 종이 질감의 따뜻한 오프화이트로 "로컬·장인" 톤 */
-  --color-background: #faf8f5;
+  /* 노을 (따뜻한 보조 색 — 장식 전용, 글자색 금지) */
+  --color-sunset: #e0916b;
+  --color-sunset-soft: #f7e3d6;
+  --color-sun: #d9674a;
+
+  /* 작업자 일러스트 전용 (안전모/조끼) */
+  --color-gear-helmet: #ffffff;
+  --color-gear-helmet-line: #2c3338;
+  --color-gear-helmet-ridge: #c3ced6;
+
+  /* 깊은 앵커 — 파스텔을 눌러주는 무게중심 (푸터/강조 블록) */
+  --color-deep: #17222f;
+  --color-deep-soft: #24344a;
+  --color-on-deep: #e8edf1;
+  --color-on-deep-muted: #9fb0c0;
+
+  /* 바탕과 글자 */
+  --color-background: #f9f8f5;
   --color-surface: #ffffff;
-  --color-foreground: #1c1a17;
-  --color-foreground-muted: #6b6459;
-  --color-border: #e7e2d9;
+  --color-ink: #2c3338;
+  --color-ink-muted: #5d6b73;
+  --color-border: #e3e4e0;
 
-  --color-primary: var(--color-brand-blue);
+  /* 역할 별칭 */
+  --color-primary: var(--color-sea-deep);
   --color-primary-foreground: #ffffff;
-  --color-accent: var(--color-brand-red);
-  --color-accent-foreground: #ffffff;
+  --color-link: var(--color-sea-deep);
 
-  --radius-sm: 0.375rem;
+  /* 둥근 모서리 (따뜻한 톤 — 기존보다 크게) */
+  --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
-  --radius-lg: 1.25rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgb(28 26 23 / 0.06);
-  --shadow-md: 0 8px 24px rgb(28 26 23 / 0.08);
+  --shadow-sm: 0 1px 2px rgb(23 34 47 / 0.05), 0 1px 1px rgb(23 34 47 / 0.04);
+  --shadow-md: 0 2px 4px rgb(23 34 47 / 0.04), 0 12px 28px rgb(23 34 47 / 0.07);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #17140f;
-    --color-surface: #211d17;
-    --color-foreground: #f3f0e9;
-    --color-foreground-muted: #b3ab9c;
-    --color-border: #3a352b;
-  }
-}
+/*
+ * 다크 모드는 의도적으로 쓰지 않는다.
+ * 파스텔 팔레트는 어두운 바탕에서 탁해지고, 주 방문자(어르신 포함)에게는
+ * 밝고 대비 확실한 화면이 더 편하다. 대신 어떤 환경에서도 같은 화면이 나오도록 색을 명시한다.
+ */
 
-/* Tailwind v4에 위 CSS 변수를 유틸리티 색상 토큰으로 등록 (라이트/다크 자동 대응) */
 @theme inline {
   --color-background: var(--color-background);
   --color-surface: var(--color-surface);
-  --color-foreground: var(--color-foreground);
-  --color-foreground-muted: var(--color-foreground-muted);
   --color-border: var(--color-border);
   --color-primary: var(--color-primary);
   --color-primary-foreground: var(--color-primary-foreground);
-  --color-accent: var(--color-accent);
-  --color-accent-foreground: var(--color-accent-foreground);
-  --color-brand-red: var(--color-brand-red);
-  --color-brand-blue: var(--color-brand-blue);
+  --color-link: var(--color-link);
+
+  --color-deep: var(--color-deep);
+  --color-deep-soft: var(--color-deep-soft);
+  --color-on-deep: var(--color-on-deep);
+  --color-on-deep-muted: var(--color-on-deep-muted);
+  --color-sea: var(--color-sea);
+  --color-sea-deep: var(--color-sea-deep);
+  --color-sea-soft: var(--color-sea-soft);
+  --color-sea-pale: var(--color-sea-pale);
+  --color-sunset: var(--color-sunset);
+  --color-sunset-soft: var(--color-sunset-soft);
+  --color-sun: var(--color-sun);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
 
-  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    "Apple SD Gothic Neo", system-ui, sans-serif;
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+
+  --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    system-ui, sans-serif;
+  --font-display: Jua, Pretendard, system-ui, sans-serif;
 }
