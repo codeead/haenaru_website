@@ -13,10 +13,13 @@
 interface Props {
   tool: "wrench" | "grinder" | "welder";
   side?: "left" | "right";
+  /** 좁은 화면에서 반대쪽으로 보내고 싶을 때 (기본은 side 와 동일) */
+  mobileSide?: "left" | "right";
   class?: string;
 }
 
-const { tool, side = "right", class: className = "" } = Astro.props;
+const { tool, side = "right", mobileSide, class: className = "" } = Astro.props;
+const narrowSide = mobileSide ?? side;
 
 // 도구가 작업하는 가상의 세로선과 정지 지점
 const TARGET_X = 150;
@@ -35,7 +38,7 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
 });
 ---
 
-<div class:list={["tool-motion", `side-${side}`, `tool-${tool}`, className]} aria-hidden="true">
+<div class:list={["tool-motion", `side-${side}`, `m-side-${narrowSide}`, `tool-${tool}`, className]} aria-hidden="true">
   <svg viewBox="0 0 180 260" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- C안 감성: 면으로 그리고 부드러운 그림자로 층을 만든다 -->
@@ -43,8 +46,8 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
         <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="var(--color-deep)" flood-opacity="0.16" />
       </filter>
     </defs>
-    <!-- 작업 기준선 -->
-    <line x1={TARGET_X} y1="34" x2={TARGET_X} y2="226" stroke="var(--color-sea-soft)" stroke-width="6" stroke-linecap="round" />
+    <!-- 작업 기준선 (좁은 화면에서는 숨긴다) -->
+    <line class="guide" x1={TARGET_X} y1="34" x2={TARGET_X} y2="226" stroke="var(--color-sea-soft)" stroke-width="6" stroke-linecap="round" />
 
     <g class="rig" filter="url(#tool-shadow)">
       {
@@ -123,21 +126,29 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
 </div>
 
 <style>
+  /*
+   * 배치 규칙: 바깥으로 미는 거리 = 도구 너비. 그래야 컨테이너 안으로 한 픽셀도 안 들어온다.
+   * --tool-peek 만큼만 되돌려 살짝 보이게 하는데, 그 값은 섹션 좌우 여백(px-4 = 1rem)과 같아서
+   * 본문·카드가 아니라 가장자리 여백 위에만 걸친다.
+   */
   .tool-motion {
+    --tool-w: 11rem;
+    --tool-peek: 0rem;
     position: absolute;
     top: 50%;
-    width: 11rem;
+    width: var(--tool-w);
     opacity: 0.95;
     pointer-events: none;
     transform: translateY(-50%);
   }
-  /* 오른쪽 끝 기준선을 섹션 가장자리에 맞춘다 */
+
+  /* 도구 머리(물림쇠·아크)는 항상 본문 쪽을 향하고, 손잡이가 바깥으로 나가 잘린다. */
   .tool-motion.side-right {
-    right: -5.5rem;
+    right: calc(var(--tool-peek) - var(--tool-w));
+    transform: translateY(-50%) scaleX(-1);
   }
   .tool-motion.side-left {
-    left: -5.5rem;
-    transform: translateY(-50%) scaleX(-1);
+    left: calc(var(--tool-peek) - var(--tool-w));
   }
   .tool-motion svg {
     width: 100%;
@@ -145,21 +156,28 @@ const teeth = Array.from({ length: TOOTH_COUNT }, (_, i) => {
     display: block;
   }
 
-  /* 좁은 화면에서는 섹션 오른쪽 위 여백으로 옮기고 작게 */
+  /* 좁은 화면: 기준선을 빼고 도구만 오르내린다. 여백 폭(1rem)만 걸치게 둔다. */
   @media (max-width: 1240px) {
     .tool-motion {
-      top: 0.5rem;
-      width: 4.75rem;
-      opacity: 0.65;
-      transform: none;
+      --tool-w: 8rem;
+      --tool-peek: 1rem;
+      opacity: 0.5;
     }
-    .tool-motion.side-right {
-      right: 0.25rem;
+    .tool-motion.tool-grinder {
+      --tool-w: 6rem;
     }
-    .tool-motion.side-left {
+    .tool-motion.m-side-right {
+      right: calc(var(--tool-peek) - var(--tool-w));
       left: auto;
-      right: 0.25rem;
-      transform: scaleX(-1);
+      transform: translateY(-50%) scaleX(-1);
+    }
+    .tool-motion.m-side-left {
+      left: calc(var(--tool-peek) - var(--tool-w));
+      right: auto;
+      transform: translateY(-50%);
+    }
+    .guide {
+      display: none;
     }
   }
 

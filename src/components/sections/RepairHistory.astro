@@ -26,7 +26,7 @@ const [featuredWork, ...restWorks] = recentWorks;
 
   <!-- 그라인더는 이 콘텐츠 칸을 기준으로 세로 가운데에 붙는다 -->
   <div class="relative mt-8">
-    <ToolMotion tool="grinder" side="right" />
+    <ToolMotion tool="grinder" side="right" mobileSide="left" />
     {
       !featuredWork ? (
         <div class="rounded-md border border-border bg-surface px-6 py-16 text-center shadow-sm">

@@ -8,6 +8,11 @@
    */
   html {
     scroll-behavior: smooth;
+    /*
+     * 컨테이너 밖으로 밀어낸 장식(사이드 모션)이 가로 스크롤을 만들지 않게 한다.
+     * clip 은 hidden 과 달리 스크롤 컨테이너를 만들지 않아 부드러운 앵커 이동이 그대로 동작한다.
+     */
+    overflow-x: clip;
   }
 
   body {
@@ -16,6 +21,8 @@
     /* 한국어는 단어 중간에서 끊으면 읽기 나쁘다. 어절 단위로만 줄바꿈. */
     word-break: keep-all;
     overflow-wrap: break-word;
+    /* 컨테이너 밖으로 밀어낸 장식(사이드 모션)이 가로 스크롤을 만들지 않게 */
+    overflow-x: clip;
   }
 
   /* 제목은 줄 길이를 고르게 */
