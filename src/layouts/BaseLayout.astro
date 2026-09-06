@@ -36,6 +36,15 @@ const businessJsonLd = {
     addressCountry: "KR",
   },
   areaServed: { "@type": "City", name: "당진시" },
+  ...(siteConfig.mapLatitude && siteConfig.mapLongitude
+    ? {
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: siteConfig.mapLatitude,
+          longitude: siteConfig.mapLongitude,
+        },
+      }
+    : {}),
   openingHours: "Mo-Fr 09:00-18:00",
   makesOffer: services.map((service) => ({
     "@type": "Offer",

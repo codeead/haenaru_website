@@ -11,6 +11,11 @@
   "address": "충남 당진시 아미로 828(대덕동)",
   "businessHours": "평일 09:00 - 18:00 (주말/공휴일 휴무)",
   "businessRegistrationNumber": "",
-  "registrations": ["난방시공업2종", "가스시설시공업3종"],
-  "kakaoChannelUrl": ""
+  "registrations": [
+    "난방시공업2종",
+    "가스시설시공업3종"
+  ],
+  "kakaoChannelUrl": "",
+  "mapLatitude": "36.8820407",
+  "mapLongitude": "126.6323506"
 }

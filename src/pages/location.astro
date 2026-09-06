@@ -3,11 +3,29 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import { siteConfig } from "@/lib/site";
 
-const searchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(siteConfig.address)}`;
-const routeUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteConfig.companyName)},${encodeURIComponent(siteConfig.address)}`;
+/*
+ * 카카오맵 링크 규격
+ *   지도 보기 : /link/map/{이름},{위도},{경도}
+ *   길찾기    : /link/to/{이름},{위도},{경도}
+ *   검색      : /link/search/{검색어}
+ * 앞의 두 형식은 좌표가 반드시 숫자여야 한다. 주소 문자열을 넣으면 파싱에 실패해
+ * 카카오맵 첫 화면으로 떨어진다(경로가 안 찍히던 원인).
+ * 좌표가 아직 없으면 확실히 동작하는 주소 검색으로 대체한다.
+ */
+const { companyName, address, mapLatitude, mapLongitude } = siteConfig;
+const hasCoords = mapLatitude.trim() !== "" && mapLongitude.trim() !== "";
+const coords = `${mapLatitude.trim()},${mapLongitude.trim()}`;
+
+const searchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(address)}`;
+const placeUrl = hasCoords
+  ? `https://map.kakao.com/link/map/${encodeURIComponent(companyName)},${coords}`
+  : searchUrl;
+const routeUrl = hasCoords
+  ? `https://map.kakao.com/link/to/${encodeURIComponent(companyName)},${coords}`
+  : searchUrl;
 ---
 
-<BaseLayout title="오시는 길" description={siteConfig.address}>
+<BaseLayout title="오시는 길" description={address}>
   <PageHeader
     eyebrow="오시는 길"
     title="당진시에 있습니다"
@@ -18,7 +36,7 @@ const routeUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteConfig
     <dl class="space-y-6 rounded-md border border-border bg-surface p-6 sm:p-8">
       <div>
         <dt class="text-sm text-ink-muted">주소</dt>
-        <dd class="mt-1 text-lg font-semibold text-ink">{siteConfig.address}</dd>
+        <dd class="mt-1 text-lg font-semibold text-ink">{address}</dd>
       </div>
       <div>
         <dt class="text-sm text-ink-muted">영업시간</dt>
@@ -34,7 +52,7 @@ const routeUrl = `https://map.kakao.com/link/map/${encodeURIComponent(siteConfig
 
     <div class="mt-6 grid gap-3 sm:grid-cols-2">
       <a
-        href={searchUrl}
+        href={placeUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center rounded-full border-2 border-sea bg-surface px-5 py-3.5 text-base font-bold text-sea-deep transition-transform active:scale-[0.97]"
